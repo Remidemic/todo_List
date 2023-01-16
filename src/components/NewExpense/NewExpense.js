@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState }from "react";
 import ExpenseForm from "./ExpenseForm";
 import './NewExpense.css'
 
 const NewExpense = (props) => {
+
+   const [isEditing, setIsEditing] = useState(false)
 
     // this is the function that will trigger when something happens in the child component, passing data from child to parent 
 
@@ -13,14 +15,28 @@ const NewExpense = (props) => {
             ...enteredExpenseData,
             id: Math.random().toString(),
         };
-        console.log(expenseData)
+        // console.log(expenseData + "this is where id is made")
         props.onAddExpense(expenseData);
+        setIsEditing(false)
     };
+
+    const startEditingHandler = () =>{
+        setIsEditing(true)
+    }
+
+    const stopEditingHandler = () =>{
+        setIsEditing(false);
+    }
 
     return (
         <div className="new-expense">
                 {/* the value of onSave prop should be function that can be called in the child component  */}
-            <ExpenseForm onSaveExpenseDataNewVar={SaveExpenseDataHandler} />
+            
+            {!isEditing && <button onClick={startEditingHandler}>Add New Expense </button>}
+            {isEditing && (
+            <ExpenseForm 
+            onSaveExpenseDataNewVar={SaveExpenseDataHandler}
+            onCancel = {stopEditingHandler} />) }
         </div>
     )
 };
